@@ -35,3 +35,14 @@ const sendAllData = (request, response) => {
   console.log(projectData);
 };
 app.get("/allData", sendAllData);
+
+// initialize POST route and its callback function
+const receiveData = (response, request) => {
+  console.log(request.body);
+  newData = {
+    temperature: request.body.temperature,
+    date: request.body.date,
+    userFeeling: request.body.feeling,
+  };
+};
+app.post("/receivedData", receiveData);
