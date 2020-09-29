@@ -5,6 +5,8 @@ projectData = {};
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { request } = require("http");
+const { response } = require("express");
 
 // Start up an instance of app
 const app = express();
@@ -26,3 +28,10 @@ const listening = () => {
 };
 
 const server = app.listen(port, listening);
+
+// initialize GET route and its callback function
+const sendAllData = (request, response) => {
+  response.send(projectData);
+  console.log(projectData);
+};
+app.get("/allData", sendAllData);
