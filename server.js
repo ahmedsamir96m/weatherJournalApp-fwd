@@ -5,8 +5,6 @@ projectData = {};
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { request } = require("http");
-const { response } = require("express");
 
 // Start up an instance of app
 const app = express();
@@ -32,17 +30,16 @@ const server = app.listen(port, listening);
 // initialize GET route and its callback function
 const sendAllData = (request, response) => {
   response.send(projectData);
+  projectData = [];
   console.log(projectData);
 };
 app.get("/allData", sendAllData);
 
 // initialize POST route and its callback function
-const receiveData = (response, request) => {
-  console.log(request.body);
-  newData = {
-    temperature: request.body.temperature,
-    date: request.body.date,
-    userFeeling: request.body.feeling,
-  };
-};
-app.post("/receivedData", receiveData);
+function receiveData(request, response) {
+  const data = request.body;
+  projectData["date"] = data.date;
+  projectData["temp"] = data.temp;
+  projectData["feeling"] = data.feeling;
+}
+app.post("/received", receiveData);

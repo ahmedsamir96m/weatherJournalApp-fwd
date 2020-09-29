@@ -1,6 +1,6 @@
 /* Global Variables */
-const apiKey = "f3dd4d99772d41e15b26f5fc6a2b683c";
-const baseURL = `https://api.openweathermap.org/data/2.5/forecast?zip=`;
+const apiKey = "&appid=f3dd4d99772d41e15b26f5fc6a2b683c";
+const baseURL = `http://api.openweathermap.org/data/2.5/weather?zip=`;
 const generateBtn = document.getElementById("generate");
 
 // Create a new date instance dynamically with JS
@@ -13,14 +13,11 @@ let newDate =
   currentDate.getFullYear();
 
 // async function to get the city weather
-const getCityWeather = async (
-  url = "https://api.openweathermap.org/data/2.5/forecast?zip=",
-  key = "f3dd4d99772d41e15b26f5fc6a2b683c",
-  zip = "12511"
-) => {
+async function getCityWeather(url, zip, key) {
   const response = await fetch(url + zip + key);
   try {
     const cityWeatherData = response.json();
+    console.log(cityWeatherData);
     return cityWeatherData;
   } catch (error) {
     // handling errors in case the api call didn't make it
@@ -28,22 +25,40 @@ const getCityWeather = async (
         ${error}
       `);
   }
-};
+}
+
+// initialize function to POST data to the server
+async function postData(url = "", data = {}) {
+  const resp = await fetch(url, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  console.log(data);
+
+  try {
+    const brandNewData = await resp.json();
+    return brandNewData;
+  } catch (error) {
+    console.log(`catched an error ${error}`);
+  }
+}
 
 // callback function to get the user inputs, call the api function, and post the data to the server
-const performAction = (e) => {
-  e.preventDefault();
+function performAction() {
   const zipCode = document.getElementById("zip").value;
   const userFeelings = document.getElementById("feelings").value;
-
   getCityWeather(baseURL, zipCode, apiKey).then((data) => {
-    console.log(data);
-    postData("/receivedData", {
-      temperature: data.list[0].main.temp,
+    postData("/received", {
+      temp: data.main.temp,
       date: currentDate,
-      userFeeling: userFeelings,
+      feeling: userFeelings,
     });
   });
-};
+}
 // event listener to perforrm action when the user click the generate button
 generateBtn.addEventListener("click", performAction);
