@@ -48,6 +48,26 @@ async function postData(url = "", data = {}) {
   }
 }
 
+// initialize function to GET data from the server and use it to update the UI
+const updateSectionUI = async () => {
+  const req = await fetch("/allData");
+  try {
+    const jsonData = await req.json();
+    console.log(jsonData);
+    document.getElementById(
+      "date"
+    ).innerHTML = `Current Date: ${jsonData.date}`;
+    document.getElementById(
+      "temp"
+    ).innerHTML = `Temperature is: ${jsonData.temp} ℉`;
+    document.getElementById(
+      "content"
+    ).innerHTML = `What I'm feeling: ${jsonData.feeling}`;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // callback function to get the user inputs, call the api function, and post the data to the server
 function performAction() {
   const zipCode = document.getElementById("zip").value;
@@ -58,6 +78,7 @@ function performAction() {
       date: currentDate,
       feeling: userFeelings,
     });
+    updateSectionUI();
   });
 }
 // event listener to perforrm action when the user click the generate button

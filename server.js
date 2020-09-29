@@ -30,7 +30,6 @@ const server = app.listen(port, listening);
 // initialize GET route and its callback function
 const sendAllData = (request, response) => {
   response.send(projectData);
-  projectData = [];
   console.log(projectData);
 };
 app.get("/allData", sendAllData);
