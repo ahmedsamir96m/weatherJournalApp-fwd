@@ -29,3 +29,21 @@ const getCityWeather = async (
       `);
   }
 };
+
+// callback function to get the user inputs, call the api function, and post the data to the server
+const performAction = (e) => {
+  e.preventDefault();
+  const zipCode = document.getElementById("zip").value;
+  const userFeelings = document.getElementById("feelings").value;
+
+  getCityWeather(baseURL, zipCode, apiKey).then((data) => {
+    console.log(data);
+    postData("/receivedData", {
+      temperature: data.list[0].main.temp,
+      date: currentDate,
+      userFeeling: userFeelings,
+    });
+  });
+};
+// event listener to perforrm action when the user click the generate button
+generateBtn.addEventListener("click", performAction);
